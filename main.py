@@ -12,8 +12,8 @@ from tensorflow.keras.layers import Dense, Dropout, LSTM
 
 stock_ticker = "NVDA"
 
-start = dt.datetime(2012,1,1)
-end = dt.datetime(2021,3,1)
+start = dt.datetime(2012, 1,1)
+end = dt.datetime(2021, 3, 1)
 
 data = web.DataReader(stock_ticker, 'yahoo', start, end)
 
@@ -34,7 +34,7 @@ for i in range(prediction_range, len(scaled_data)):
 x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
 
-# the model (LSTM layers follower by Droput layers until a final Dense layer that gives us the stock prediction)
+# the model (LSTM layers follower by Dropout layers until a final Dense layer that gives us the stock prediction)
 
 model = Sequential()
 
@@ -43,7 +43,7 @@ model.add(Dropout(0.2))
 model.add(LSTM(units=45, return_sequences=True))
 model.add(Dropout(0.2))
 model.add(LSTM(units=45))
-model.add(Dense(units=1)) #prediction of next closing value
+model.add(Dense(units=1))  # prediction of next closing value
 model.compile(optimizer='adam', loss='mean_squared_error')
 model.fit(x_train, y_train, epochs=20, batch_size=32)
 
@@ -86,4 +86,3 @@ plt.xlabel('Time')
 plt.ylabel("{} stock price".format(stock_ticker))
 plt.legend()
 plt.show()
-
