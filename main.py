@@ -2,20 +2,32 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import pandas_datareader as web
+import pandas_datareader.data as pdr
 import datetime as dt
 
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, LSTM
+import yfinance as yf
+
+
+yf.pdr_override()
 
 # Load data
 
-stock_ticker = "NVDA"
+stock_ticker = 'NVDA'
 
-start = dt.datetime(2012, 1,1)
-end = dt.datetime(2021, 3, 1)
+start = '01-01-2012'
+end = '01-01-2021'
 
-data = web.DataReader(stock_ticker, 'yahoo', start, end)
+start = dt.datetime.strptime(start, '%d-%m-%Y')
+end = dt.datetime.strptime(end, '%d-%m-%Y')
+
+#start = dt.datetime(2012, 1,1)
+#end = dt.datetime(2020, 1, 1)
+
+data = pdr.get_data_yahoo(stock_ticker, data_source='yahoo', start=start, end=end)
+#data = web.DataReader(stock_ticker, 'yahoo', start, end)
 
 # pre-processing
 
@@ -29,7 +41,7 @@ y_train = []
 
 for i in range(prediction_range, len(scaled_data)):
     x_train.append(scaled_data[i-prediction_range:i, 0])
-    y_train.append(scaled_data[x,0])
+    y_train.append(scaled_data[i,0])
 
 x_train, y_train = np.array(x_train), np.array(y_train)
 x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
@@ -51,10 +63,16 @@ model.fit(x_train, y_train, epochs=20, batch_size=32)
 
 # loading test data
 
-test_start = dt.datetime(2021,4,1)
-test_end = dt.datetime.now()
+#test_start = dt.datetime(2021,2,1)
+#test_end = dt.datetime.now()
+test_start = '01-02-2021'
+test_end = '02-07-2021'
 
-test_data = web.DataReader(stock_ticker, 'yahoo', test_start, test_end)
+test_start = dt.datetime.strptime(test_start, '%d-%m-%Y')
+test_end = dt.datetime.strptime(test_end, '%d-%m-%Y')
+
+test_data = pdr.get_data_yahoo(stock_ticker, data_source='yahoo', start=start, end=end)
+#test_data = web.DataReader(stock_ticker, 'yahoo', test_start, test_end)
 actual_prices = test_data['Close'].values
 
 total_data = pd.concat((data['Close'], test_data['Close']), axis=0)
