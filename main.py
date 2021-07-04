@@ -71,6 +71,19 @@ for i in range(prediction_range, len(model_inputs)):
     x_test.append(model_inputs[i-prediction_range:i,0])
 
 x_test = np.array(x_test)
+x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
+predicted_prices = model.predict(x_test)
+# prices are in transformed scale so need to inverse transform them back
+predicted_prices = min_max.inverse_transform(predicted_prices)
 
+# plot test predictions
+
+plt.plot(actual_prices, color="blue", label="Actual {} price".format(stock_ticker))
+plt.plot(predicted_prices, color="red", label="Predicted {} price".format(stock_ticker))
+plt.title("{} stock price".format(stock_ticker))
+plt.xlabel('Time')
+plt.ylabel("{} stock price".format(stock_ticker))
+plt.legend()
+plt.show()
 
