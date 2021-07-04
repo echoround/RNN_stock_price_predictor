@@ -71,7 +71,7 @@ test_end = '02-07-2021'
 test_start = dt.datetime.strptime(test_start, '%d-%m-%Y')
 test_end = dt.datetime.strptime(test_end, '%d-%m-%Y')
 
-test_data = pdr.get_data_yahoo(stock_ticker, data_source='yahoo', start=start, end=end)
+test_data = pdr.get_data_yahoo(stock_ticker, data_source='yahoo', test_start=start, test_end=end)
 #test_data = web.DataReader(stock_ticker, 'yahoo', test_start, test_end)
 actual_prices = test_data['Close'].values
 
