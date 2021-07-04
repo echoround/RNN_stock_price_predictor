@@ -13,7 +13,7 @@ from tensorflow.keras.layers import Dense, Dropout, LSTM
 stock_ticker = "NVDA"
 
 start = dt.datetime(2012,1,1)
-end = dt.datetime(2020,1,1)
+end = dt.datetime(2021,3,1)
 
 data = web.DataReader(stock_ticker, 'yahoo', start, end)
 
@@ -44,9 +44,33 @@ model.add(LSTM(units=45, return_sequences=True))
 model.add(Dropout(0.2))
 model.add(LSTM(units=45))
 model.add(Dense(units=1)) #prediction of next closing value
+model.compile(optimizer='adam', loss='mean_squared_error')
+model.fit(x_train, y_train, epochs=20, batch_size=32)
 
+# Testing data
 
+# loading test data
 
+test_start = dt.datetime(2021,4,1)
+test_end = dt.datetime.now()
+
+test_data = web.DataReader(stock_ticker, 'yahoo', test_start, test_end)
+actual_prices = test_data['Close'].values
+
+total_data = pd.concat((data['Close'], test_data['Close']), axis=0)
+
+model_inputs = total_data[len(total_data) - len(test_data) - prediction_range:].values
+model_inputs = model_inputs.reshape(-1,1)
+model_inputs = min_max.transform(model_inputs)
+
+# make predictions on test data
+
+x_test = []
+
+for i in range(prediction_range, len(model_inputs)):
+    x_test.append(model_inputs[i-prediction_range:i,0])
+
+x_test = np.array(x_test)
 
 
 
