@@ -34,6 +34,8 @@ data = pdr.get_data_yahoo(stock_ticker, data_source='yahoo', start=start, end=en
 min_max = MinMaxScaler(feature_range=(0,1))
 scaled_data = min_max.fit_transform(data['Close'].values.reshape(-1,1))
 
+# decreasing prediction range will make the model more sensitive to short-term fluctuations and
+# increasing the range will make it better at long-term prediction
 prediction_range = 60
 
 x_train = []
