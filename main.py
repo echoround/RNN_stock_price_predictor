@@ -18,7 +18,7 @@ yf.pdr_override()
 stock_ticker = 'NVDA'
 
 start = '01-01-2012'
-end = '01-01-2021'
+end = '02-07-2021'
 
 start = dt.datetime.strptime(start, '%d-%m-%Y')
 end = dt.datetime.strptime(end, '%d-%m-%Y')
@@ -63,6 +63,8 @@ model.fit(x_train, y_train, epochs=20, batch_size=32)
 
 # Testing data
 
+
+
 # loading test data
 
 #test_start = dt.datetime(2021,2,1)
@@ -93,6 +95,8 @@ for i in range(prediction_range, len(model_inputs)):
 x_test = np.array(x_test)
 x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
+'''
+
 predicted_prices = model.predict(x_test)
 # prices are in transformed scale so need to inverse transform them back
 predicted_prices = min_max.inverse_transform(predicted_prices)
@@ -107,6 +111,7 @@ plt.ylabel("{} stock price".format(stock_ticker))
 plt.legend()
 plt.show()
 
+'''
 
 # predict next day
 
