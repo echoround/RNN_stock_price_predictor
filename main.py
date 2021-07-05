@@ -66,7 +66,7 @@ model.fit(x_train, y_train, epochs=20, batch_size=32)
 #test_start = dt.datetime(2021,2,1)
 #test_end = dt.datetime.now()
 test_start = '01-02-2021'
-test_end = '02-07-2021'
+test_end = '05-07-2021'
 
 test_start = dt.datetime.strptime(test_start, '%d-%m-%Y')
 test_end = dt.datetime.strptime(test_end, '%d-%m-%Y')
@@ -104,3 +104,15 @@ plt.xlabel('Time')
 plt.ylabel("{} stock price".format(stock_ticker))
 plt.legend()
 plt.show()
+
+
+# predict next day
+
+real_data = [model_inputs[len(model_inputs) + 1 - prediction_range:len(model_inputs+1), 0]]
+real_data = np.array(real_data)
+real_data = np.reshape(real_data, (real_data.shape[0], real_data.shape[1], 1))
+
+prediction = model.predict(real_data)
+prediction = min_max.inverse_transform(prediction)
+print("Prediction for {0}: {1}".format(stock_ticker, prediction))
+
