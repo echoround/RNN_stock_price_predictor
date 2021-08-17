@@ -1,2 +1,3 @@
 # stock_price_prediction
- Predicting stock prices with an RNN model
+ 
+ Simple RNN model for predicting stock prices (data from Yahoo Finance).
